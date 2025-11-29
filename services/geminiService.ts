@@ -1,12 +1,25 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
-// Note: In a real prod app, you should handle missing keys gracefully. 
-// We will instantiate strictly when called to avoid init errors if key is missing initially.
+// Safely access process.env for browser environments where 'process' might not be defined
+const getApiKey = () => {
+  try {
+    // Check if process is defined (Node/Bundler environment)
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env.API_KEY || '';
+    }
+    // Fallback for Vite or other env injections if needed, or return empty string
+    return ''; 
+  } catch (e) {
+    return '';
+  }
+};
+
+const apiKey = getApiKey();
 
 export const getSmartFoodRecommendations = async (query: string, availableCuisines: string[]): Promise<string[]> => {
   if (!apiKey) {
     console.warn("Gemini API Key missing");
+    // Return empty array instead of crashing if key is missing
     return [];
   }
 
