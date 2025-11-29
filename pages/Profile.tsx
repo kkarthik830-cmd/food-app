@@ -12,13 +12,15 @@ export const Profile: React.FC = () => {
       
       <div className="px-4 py-6">
         <div className="bg-white rounded-2xl p-6 shadow-sm mb-6 flex items-center gap-4">
-            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-400">
+            <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center text-rose-500">
                 <User size={32} />
             </div>
             <div>
                 <h2 className="text-xl font-bold text-gray-800">{user?.name}</h2>
                 <p className="text-sm text-gray-500">{user?.phone}</p>
-                <p className="text-xs text-rose-500 font-bold mt-1">Edit Profile</p>
+                <div className="mt-2 flex gap-2">
+                   <span className="text-[10px] bg-yellow-100 text-yellow-700 font-bold px-2 py-0.5 rounded-full">GOLD MEMBER</span>
+                </div>
             </div>
         </div>
 
@@ -42,6 +44,10 @@ export const Profile: React.FC = () => {
                      <ChevronRight size={18} className="text-gray-300" />
                  </div>
              ))}
+        </div>
+        
+        <div className="mt-8 text-center">
+            <p className="text-[10px] text-gray-400">Crave App v1.0.0</p>
         </div>
       </div>
       <BottomNav />

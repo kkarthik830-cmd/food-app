@@ -11,20 +11,22 @@ interface AppState {
   clearCart: () => void;
   placeOrder: (restaurantId: string, restaurantName: string) => Promise<string>;
   toggleFavorite: (restaurantId: string) => void;
-  cartRestaurantId: string | null; // Ensures cart only has items from one restaurant
+  cartRestaurantId: string | null;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  // Initialize with a default user immediately
+  
+  // Default Guest User - No login required
   const [user, setUser] = useState<User>({
     name: 'Foodie Guest',
     email: 'guest@crave.com',
     phone: '+1 555 0199',
     addresses: [{ id: '1', label: 'Home', details: '123 Flavor Street, Foodville' }],
   });
+  
   const [orders, setOrders] = useState<Order[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [cartRestaurantId, setCartRestaurantId] = useState<string | null>(null);
@@ -82,7 +84,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setOrders((prev) => [newOrder, ...prev]);
         clearCart();
         resolve(newOrder.id);
-      }, 1500); // Simulate API delay
+      }, 1500); 
     });
   };
 
