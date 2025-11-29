@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CartItem, MenuItem, Order, Restaurant, User } from './types';
+import { CartItem, MenuItem, Order, Restaurant, User, PaymentMethod } from './types';
 
 interface AppState {
   cart: CartItem[];
@@ -9,8 +10,9 @@ interface AppState {
   addToCart: (item: MenuItem, restaurantId: string) => void;
   removeFromCart: (itemId: string) => void;
   clearCart: () => void;
-  placeOrder: (restaurantId: string, restaurantName: string) => Promise<string>;
+  placeOrder: (restaurantId: string, restaurantName: string, scheduledFor: string | undefined, paymentMethod: PaymentMethod) => Promise<string>;
   toggleFavorite: (restaurantId: string) => void;
+  updateAddress: (newDetails: string) => void;
   cartRestaurantId: string | null;
 }
 
@@ -69,7 +71,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCartRestaurantId(null);
   };
 
-  const placeOrder = async (restaurantId: string, restaurantName: string): Promise<string> => {
+  const placeOrder = async (restaurantId: string, restaurantName: string, scheduledFor: string | undefined, paymentMethod: PaymentMethod): Promise<string> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const newOrder: Order = {
@@ -80,6 +82,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           date: new Date().toISOString(),
           restaurantId,
           restaurantName,
+          scheduledFor: scheduledFor || 'Now',
+          paymentMethod,
         };
         setOrders((prev) => [newOrder, ...prev]);
         clearCart();
@@ -94,6 +98,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     );
   };
 
+  const updateAddress = (newDetails: string) => {
+    setUser((prev) => ({
+      ...prev,
+      addresses: prev.addresses.map((addr, idx) => 
+        idx === 0 ? { ...addr, details: newDetails } : addr
+      )
+    }));
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -106,6 +119,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         clearCart,
         placeOrder,
         toggleFavorite,
+        updateAddress,
         cartRestaurantId,
       }}
     >

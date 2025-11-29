@@ -45,12 +45,29 @@ export const BottomNav: React.FC = () => {
 
 export const Header: React.FC<{ title?: string; showBack?: boolean; showAddress?: boolean }> = ({ title, showBack, showAddress }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useApp();
 
+  const handleBack = () => {
+    // Check if there is a history stack to go back to within the app
+    // 'default' key usually implies the start of the stack for this session
+    if (location.key !== 'default') {
+      navigate(-1);
+    } else {
+      // If direct landing or no history, go to home
+      navigate('/home');
+    }
+  };
+
   return (
-    <div className="sticky top-0 bg-white z-40 px-4 py-3 shadow-sm flex items-center gap-3">
+    <div className="sticky top-0 bg-white z-40 px-4 py-3 shadow-sm flex items-center gap-3 w-full">
       {showBack && (
-        <button onClick={() => navigate(-1)} className="p-1 rounded-full hover:bg-gray-100">
+        <button 
+            type="button"
+            onClick={handleBack} 
+            className="p-1 rounded-full hover:bg-gray-100 active:bg-gray-200 transition-colors"
+            aria-label="Go back"
+        >
           <ChevronLeft size={24} className="text-gray-700" />
         </button>
       )}

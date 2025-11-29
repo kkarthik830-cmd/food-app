@@ -1,3 +1,4 @@
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -42,6 +43,8 @@ export interface Address {
 
 export type OrderStatus = 'placed' | 'confirmed' | 'preparing' | 'out_for_delivery' | 'delivered';
 
+export type PaymentMethod = 'Google Pay' | 'PhonePe' | 'UPI' | 'Cash on Delivery';
+
 export interface Order {
   id: string;
   items: CartItem[];
@@ -50,4 +53,6 @@ export interface Order {
   date: string;
   restaurantId: string;
   restaurantName: string;
+  scheduledFor?: string;
+  paymentMethod: PaymentMethod;
 }
